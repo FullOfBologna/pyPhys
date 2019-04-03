@@ -39,12 +39,20 @@ class Application(tk.Frame):
         return canvasName.create_oval(x0,y0,x1,y1,fill='black')
 
     def Animate(self):
+
+        world = Physics.World()
+        world.setGravitationalConstant(2)
+
         mass1 = Physics.mass(30,150,30)
 
         mass2 = Physics.mass(270,150,30)
 
         self.createCircle(mass1.getPosition()[0],mass1.getPosition()[1],mass1.getRadius(),self.canvas)
         self.createCircle(mass2.getPosition()[0],mass2.getPosition()[1],mass2.getRadius(),self.canvas)
+
+        grav = Physics.Gravity(mass1,mass2,world.getGravitationalConstant())
+
+        grav.calculateForceMag()
 
 root = tk.Tk()
 app = Application(master=root)

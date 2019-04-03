@@ -14,7 +14,10 @@ class World:
         self.bounds[1] = height
 
     def setGravitationalConstant(self,gravity):
-        self.gravitationalConstant = 0
+        self.gravitationalConstant = gravity
+
+    def getGravitationalConstant(self):
+        return self.gravitationalConstant
 
     def addMass(self,mass):
         self.masses.append(mass)
@@ -41,6 +44,7 @@ class mass:
         self.mass = radius*2
         # radius size is in pixels
         self.radius = radius
+        self.accelVector = Vector()
 
     def getPosition(self):
         return self.position
@@ -51,48 +55,49 @@ class mass:
     def getRadius(self):
         return self.radius
 
+    def setAccelVector(self,vector):
+        self.accelVector = vector
 
-"""
-class Gravity():
-    def __init__(self):
-        self.accelerationRate = 0;
+#----------------------------#
+# Use the formula            #
+#   F = G*m1*m2*r/|r|^3      #
+#----------------------------#
+class Gravity:
+    def __init__(self,mass1,mass2,gravConst):
+        self.gravConst = gravConst
+        self.mass1 = mass1
+        self.mass2 = mass2
+        self.m = mass2.getMass()
+        self.accelVector = [0,0]
+        self.distMag = 1; #Initialize to 1 so doesn't have any errant divide by 0
+        self.distVector = [1,1]
 
-    #-------------------------------------------------------#
-    # accelerationRate will be in terms of pixel/timeStep^2 #
-    #-------------------------------------------------------#
-    def setGravity(self,accelerationRate):
-        self.accelerationRate = accelerationRate
+    def calculateDistMag(self):
+        x = self.distVector[0]
+        y = self.distVector[1]
 
-    def getGravity(self):
-        return self.accelerationRate
+        return math.sqrt(x**2 + y**2)
 
-class Velocity():
-    def __init__(self):
-        self.velocityVector = [0,0];
+    def calculateDistVector(self):
+        print("Mass1 position = {}".format(self.mass1.getPosition()))
+        print("Mass2 position = {}".format(self.mass2.getPosition()))
+        x = self.mass2.getPosition()[0] - self.mass1.getPosition()[0]
+        y = self.mass2.getPosition()[1] - self.mass1.getPosition()[1]
 
-    #-------------------------------------------------------------------------#
-    # Take the current velocity vector, and add the input accelerationVector
-    #   -NOTE: accelerationVector must be the same size as velocity vector.
-    #
-    # This is an iterative calculation, so only perform one "time step"
-    #-------------------------------------------------------------------------#
+        self.distVector = [x,y]
 
-    def updateVelocity(self,accelerationVector):
+    def calculateForceMag(self):
+        self.calculateDistVector()
+        print("distVect = {}".format(self.distVector))
+        r = self.calculateDistMag()
+        print("distMag = {}".format(r))
+        forceVect = []
+        for i in self.distVector:
+            forceVect.append(((self.gravConst*self.m)/(r**3))*i)
 
-        if len(accelerationVector) != len(self.velocityVector):
-            return self.velocityVector
+        print("magnitude of Gravity = {}".format((self.gravConst*self.m)/((r)**3)))
+        print("mass = {}".format(self.m))
+        print("gravConst = {}".format(self.gravConst))
+        print("r**3 = {}".format((r)**3))
+        print("forceVect = {}".format(forceVect))
 
-        for i in range(0,len(self.velocityVector)):
-            self.velocityVector[i] = self.velocityVector[i] + accelerationVector[i]
-
-        return self.velocityVector
-
-    def setVelocityVector(self,inputVelocityVector):
-        self.velocityVector = inputVelocityVector
-
-    def getVelocityVector(self):
-        return self.velocityVector
-
-    def getSpeed(self):
-        return math.sqrt(sum((x*100)**2 for x in self.velocityVector))
-"""
