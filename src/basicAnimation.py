@@ -43,21 +43,39 @@ class Application(tk.Frame):
         world = Physics.World()
         world.setGravitationalConstant(2)
 
-        mass1 = Physics.mass(30,150,30)
+        timeStep = 0.1
 
-        mass2 = Physics.mass(270,150,30)
+        massList = []
+        massList.append(Physics.mass(30,150,20,timeStep))
+        massList.append(Physics.mass(270,150,30,timeStep))
 
-        self.createCircle(mass1.getPosition()[0],mass1.getPosition()[1],mass1.getRadius(),self.canvas)
-        self.createCircle(mass2.getPosition()[0],mass2.getPosition()[1],mass2.getRadius(),self.canvas)
+        while(True):
 
-        grav = Physics.Gravity(mass1,mass2,world.getGravitationalConstant())
+            for mass1 in massList:
+                force = [0,0]
+                accelVector = [0,0]
+                for mass2 in massList:
+                    if(mass1 != mass2):
+                        grav = Physics.Gravity(mass1,mass2,world.getGravitationalConstant())
+                        force = force + grav.calculateForce()
 
-        grav.calculateForceMag()
+                for index in range(0,len(force)):
+                    force[index] = force[index]/(len(massList)-1)
+
+                    accelVector[index] = force[index]/mass1.getMass()
+
+                mass1.setAccelVector(accelVector)
+
+            for mass in range(0,len(massList)):
+                massList[mass].calculateVelocityVector()
+                massList[mass].calculatePosition()
+
+                self.createCircle(massList[mass].getPosition()[0],massList[mass].getPosition()[1],massList[mass].getRadius(),self.canvas)
+            #End while
+
 
 root = tk.Tk()
 app = Application(master=root)
 
 app.Animate()
 app.mainloop()
-
-

@@ -23,6 +23,7 @@ class World:
         self.masses.append(mass)
 
 ### Generic Vector which an object can create to handle anything it wants.
+"""
 class Vector:
     def __init__(self):
         self.position = [0,0]
@@ -33,21 +34,20 @@ class Vector:
         self.position[1] = y
 
     def setVector(self,x,y):
-        self.vector[0] = x
+        self.vector[0] =
         self.vector[1] = y
-
+"""
 ### Mass is an astronomical body or particle or later a charge.
 
 class mass:
-    def __init__(self,x,y,radius):
+    def __init__(self,x,y,radius,timeStep):
         self.position = [x,y]
         self.mass = radius*2
         # radius size is in pixels
         self.radius = radius
-        self.accelVector = Vector()
-
-    def getPosition(self):
-        return self.position
+        self.accelVector = [0,0]
+        self.velocityVector = [0,0]
+        self.timeStep = timeStep
 
     def getMass(self):
         return self.mass
@@ -55,8 +55,31 @@ class mass:
     def getRadius(self):
         return self.radius
 
-    def setAccelVector(self,vector):
-        self.accelVector = vector
+    def getAccelVector(self):
+        return self.getAccelVector
+
+    def getVelocityVector(self):
+        return self.velocityVector
+
+    def getPosition(self):
+        return self.position
+
+    def setAccelVector(self,ax,ay):
+        self.accelVector = [ax,ay]
+
+    def setVelocityVector(self,vx,vy):
+        self.velocityVector = [vx,vy]
+
+    def setPosition(self,x,y):
+        self.position = [x,y]
+
+    def calculateVelocityVector(self):
+        for index in range(0,len(self.accelVector)):
+            self.velocityVector[index] = self.velocityVector[index] + self.accelVector[index]*self.timeStep
+
+    def calculatePosition(self):
+        for index in range(0,len(self.velocityVector)):
+            self.position[index] = self.position[index] + self.velocityVector[index]*self.timeStep
 
 #----------------------------#
 # Use the formula            #
@@ -86,9 +109,9 @@ class Gravity:
 
         self.distVector = [x,y]
 
-    def calculateForceMag(self):
+    def calculateForce(self):
         self.calculateDistVector()
-        print("distVect = {}".format(self.distVector))
+#        print("distVect = {}".format(self.distVector))
         r = self.calculateDistMag()
         print("distMag = {}".format(r))
         forceVect = []
@@ -96,8 +119,8 @@ class Gravity:
             forceVect.append(((self.gravConst*self.m)/(r**3))*i)
 
         print("magnitude of Gravity = {}".format((self.gravConst*self.m)/((r)**3)))
-        print("mass = {}".format(self.m))
-        print("gravConst = {}".format(self.gravConst))
-        print("r**3 = {}".format((r)**3))
+#        print("mass = {}".format(self.m))
+#        print("gravConst = {}".format(self.gravConst))
+#        print("r**3 = {}".format((r)**3))
         print("forceVect = {}".format(forceVect))
-
+        return forceVect
