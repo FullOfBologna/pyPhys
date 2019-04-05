@@ -102,8 +102,8 @@ class Gravity:
         return math.sqrt(x**2 + y**2)
 
     def calculateDistVector(self):
-        print("Mass1 position = {}".format(self.mass1.getPosition()))
-        print("Mass2 position = {}".format(self.mass2.getPosition()))
+        #print("Mass1 position = {}".format(self.mass1.getPosition()))
+        #print("Mass2 position = {}".format(self.mass2.getPosition()))
         x = self.mass2.getPosition()[0] - self.mass1.getPosition()[0]
         y = self.mass2.getPosition()[1] - self.mass1.getPosition()[1]
 
@@ -113,14 +113,15 @@ class Gravity:
         self.calculateDistVector()
 #        print("distVect = {}".format(self.distVector))
         r = self.calculateDistMag()
-        print("distMag = {}".format(r))
-        forceVect = []
-        for i in self.distVector:
-            forceVect.append(((self.gravConst*self.m)/(r**3))*i)
 
-        print("magnitude of Gravity = {}".format((self.gravConst*self.m)/((r)**3)))
+        #print("distMag = {}".format(r))
+        forceVect = [0,0]
+        for index in range(0,len(self.distVector)):
+            forceVect[index] = ((self.gravConst*self.m)/(r**3))*self.distVector[index]
+
+        #print("magnitude of Gravity = {}".format((self.gravConst*self.m)/((r)**3)))
 #        print("mass = {}".format(self.m))
 #        print("gravConst = {}".format(self.gravConst))
 #        print("r**3 = {}".format((r)**3))
-        print("forceVect = {}".format(forceVect))
+        #print("forceVect = {}".format(forceVect))
         return forceVect
