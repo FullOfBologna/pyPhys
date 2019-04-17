@@ -18,8 +18,8 @@ class Application(tk.Frame):
         self.createMainCanvas()
 
     def createMainCanvas(self):
-        self.screenHeight = 600
-        self.screenWidth = 600
+        self.screenHeight = 800
+        self.screenWidth = 900
         self.canvas = tk.Canvas(self.master, width=self.screenWidth, height=self.screenHeight)
 
         self.canvas.pack()
@@ -44,18 +44,27 @@ class Application(tk.Frame):
         world = Physics.World()
         world.setGravitationalConstant(1000)
 
-        timeStep = 0.01
+        timeStep = 0.005
 
         massList = []
-        massList.append(Physics.mass(290,300,10,timeStep*10))
-        massList.append(Physics.mass(310,300,10,timeStep*10))
-        massList.append(Physics.mass(540,300,1,timeStep*10))
-        massList.append(Physics.mass(400,300,1,timeStep*10))
+        massList.append(Physics.mass(280,300,10,timeStep*10))
+        massList.append(Physics.mass(320,300,10,timeStep*10))
+        massList.append(Physics.mass(540,300,15,timeStep*10))
+        massList.append(Physics.mass(400,300,15,timeStep*10))
+        massList.append(Physics.mass(100,300,3,timeStep*10))
+        massList.append(Physics.mass(200,300,4,timeStep*10))
+        massList.append(Physics.mass(500,300,6,timeStep*10))
+        massList.append(Physics.mass(380,300,2,timeStep*10))
 
-        massList[0].setVelocityVector(0,3.5)
-        massList[1].setVelocityVector(0,-3.5)
-        massList[2].setVelocityVector(0,-4)
-        massList[3].setVelocityVector(0,-7)
+
+        massList[0].setVelocityVector(0,-1)
+        massList[1].setVelocityVector(0,1)
+        massList[2].setVelocityVector(0,0)
+        massList[3].setVelocityVector(0,0)
+        massList[4].setVelocityVector(0,0)
+        massList[5].setVelocityVector(0,0)
+        massList[6].setVelocityVector(0,0)
+        massList[7].setVelocityVector(0,0)
 
         debugCounter = 0;
 
@@ -72,6 +81,7 @@ class Application(tk.Frame):
                     if(mass1 != mass2):
                         grav = Physics.Gravity(mass1,mass2,world.getGravitationalConstant())
                         force = list(map(operator.add,force,grav.calculateForce()))
+                        mass1.isColliding(mass2)
 
                 for index in range(0,len(force)):
                     force[index] = force[index]/(len(massList)-1)
@@ -84,6 +94,7 @@ class Application(tk.Frame):
             for mass in range(0,len(massList)):
                 massList[mass].calculateVelocityVector()
                 massList[mass].calculatePosition()
+
                 circleObject.append(self.createCircle(massList[mass].getPosition()[0],massList[mass].getPosition()[1],massList[mass].getRadius(),self.canvas))
 
             #End while

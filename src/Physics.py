@@ -56,7 +56,7 @@ class mass:
         return self.radius
 
     def getAccelVector(self):
-        return self.getAccelVector
+        return self.accelVector
 
     def getVelocityVector(self):
         return self.velocityVector
@@ -80,6 +80,51 @@ class mass:
     def calculatePosition(self):
         for index in range(0,len(self.velocityVector)):
             self.position[index] = self.position[index] + self.velocityVector[index]*self.timeStep
+
+
+    ##-----Collision Detection-----##
+
+
+    def calculateDistMag(self,otherPosVect):
+        x = self.position[0] - otherPosVect[0]
+        y = self.position[1] - otherPosVect[1]
+
+        return math.sqrt(x**2 + y**2)
+
+    def calculateDistUnitVector(self,otherPosVect):
+
+        mag = self.calculateDistMag(otherPosVect)
+
+        delX = otherPosVect[0]-self.position[0]
+        delY = otherPosVect[1]-self.position[1]
+
+        distanceUnitVector = [delX/mag,delY/mag]
+
+        return distanceUnitVector
+
+
+        ##### TODO - Change this so it modifies both objects by 1/2 the separation distance.
+        
+    def isColliding(self,otherBody):
+
+        otherPosVect = otherBody.getPosition()
+
+        unitVect = self.calculateDistUnitVector(otherPosVect)
+        separation = self.calculateDistMag(otherPosVect)
+
+        desiredSeparation = self.radius + otherBody.radius
+
+        if(separation < desiredSeparation):
+            ## Take the position of self, and add self.radius+otherBody.radius magnitude to the unit Vector
+            otherBody.setPosition(otherBody.getPosition()[0]+unitVect[0]*desiredSeparation/separation,
+                             otherBody.getPosition()[1]+unitVect[1]*desiredSeparation/separation)
+
+            #otherBody.setAccelVector(-self.getAccelVector()[0]/otherBody.getAccelVector()[0],-self.getAccelVector()[1]/otherBody.getAccelVector()[1])
+            otherBody.setVelocityVector(-self.getVelocityVector()[0],-self.getVelocityVector()[1])
+
+
+
+
 
 #----------------------------#
 # Use the formula            #
