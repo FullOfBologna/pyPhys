@@ -1,5 +1,29 @@
 import math
 
+##################################################
+#                      _              /--\       #
+#   -----       ----- | |            / /\_\      #
+#  | |_||      | |_| || |--\        | |          #
+#  | ---|__  __| ----|| |-| |__  __  \ \         #
+#  ||    \ \/ /|_|    |_| |_|\ \/ / _ \ \        #
+#         \  /                \  /  \\-| |       #
+#         /_/                 /_/    \__/        #
+#                                                #
+##################################################
+
+# VERSION 0.01
+
+###
+#   pyPhys is a simple physics engine simulating n body attracive (for now) physics.
+#   The goal of this is to visualize the evolutionary dynamics of a system with many bodies.
+#   Ideally, with many objects, a simple solar system would emerge with the right initial conditions. 
+#
+#   This is in the infant stages of development. 
+#
+#
+#
+
+
 class World:
     def __init__(self):
 
@@ -37,7 +61,8 @@ class Vector:
         self.vector[0] =
         self.vector[1] = y
 """
-### Mass is an astronomical body or particle or later a charge.
+### Mass is an astronomical body or particle, later allow for a charge, which may end up being a new 
+###     property. .
 
 class mass:
     def __init__(self,x,y,radius,timeStep):
@@ -121,10 +146,6 @@ class mass:
 
             #otherBody.setAccelVector(-self.getAccelVector()[0]/otherBody.getAccelVector()[0],-self.getAccelVector()[1]/otherBody.getAccelVector()[1])
             otherBody.setVelocityVector(-self.getVelocityVector()[0],-self.getVelocityVector()[1])
-
-
-
-
 
 #----------------------------#
 # Use the formula            #
